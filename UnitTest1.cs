@@ -1,3 +1,4 @@
+using EAAppAutomation.Pages;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -8,17 +9,27 @@ namespace EAAppAutomation
     {
         [SetUp]
         public void Setup()
-        {
-            Driver = new ChromeDriver();    
+        {   
+            DriverHelper.InitBrowser();
 
         }
 
         [Test]
-        public void Test1()
+        public void LogInTest()
         {
+            string userName = "admin";
+            string password = "password";
+
             Driver.Navigate().GoToUrl("http://eaapp.somee.com/");
 
-            Assert.Pass();
+            HomePage homePage = new HomePage();
+            LogInPage loginPage = new LogInPage();
+
+            homePage.ClickLogin();
+            loginPage.EnterUserNameAndPassword(userName, password);
+            loginPage.ClickLogin();
+
+            Assert.That(homePage.IsLoggedOut, Is.True, "Cannot find the Log Off Button!");
         }
     }
 }
